@@ -1,53 +1,96 @@
 import random
-
-def choose_word():
-    words = ["apple", "banana", "orange", "grape", "pineapple", "strawberry", "watermelon"]
-    return random.choice(words)
-
-def display_word(word, guessed_letters):
-    displayed_word = ''
-    for letter in word:
-        if letter in guessed_letters:
-            displayed_word += letter
-        else:
-            displayed_word += '_'
-    return displayed_word
-
-def hangman():
-    word = choose_word()
-    guessed_letters = []
-    attempts = 6
-
-    print("Welcome to Hangman!")
-    print(display_word(word, guessed_letters))
-
-    while attempts > 0:
-        guess = input("Guess a letter: ").lower()
-
-        if len(guess) != 1 or not guess.isalpha():
-            print("Please enter a single letter.")
-            continue
-
-        if guess in guessed_letters:
-            print("You already guessed that letter.")
-            continue
-
-        guessed_letters.append(guess)
-
-        if guess not in word:
-            attempts -= 1
-            print("Incorrect guess! Attempts left:", attempts)
-        else:
-            print("Good guess!")
-
-        displayed = display_word(word, guessed_letters)
-        print(displayed)
-
-        if '_' not in displayed:
-            print("Congratulations! You guessed the word:", word)
-            break
-
-    if '_' in displayed:
-        print("Sorry, you ran out of attempts. The word was:", word)
-
-hangman()
+ 
+def making_a_guess():
+    x = 0
+    global update_display
+    correct_guess = False
+    for letter in chosen_word:
+        if guess.lower() == chosen_word[x]:
+            blank_list[x] = guess.lower()
+            correct_guess = True
+        x += 1
+    if correct_guess == False:
+        print(f"There is no {guess}, sorry.")
+        update_display += 1
+    x = 0
+ 
+ 
+HANGMANPICS = ['''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========''']
+ 
+word_list = ["aardvark", "baboon", "camel", "jazz", "grass", "follow", "castle", "cloud"]
+ 
+chosen_word = list(random.choice(word_list))
+ 
+blank = ""
+for letter in chosen_word:
+    blank += "_"
+blank_list = list(blank)
+ 
+update_display = 0
+ 
+#----------------------------------------------------------------------------------------------
+ 
+print(HANGMANPICS[update_display])
+guess = input(f"Welcome to hangman.\n{blank}\nMake a guess? ")
+making_a_guess()
+print(HANGMANPICS[update_display])
+print(''.join(blank_list))
+while update_display < 6:
+    if blank_list == chosen_word:
+        print("YOU WIN!")
+        break
+    guess = input("Make another guess? ")
+    making_a_guess()
+    print(HANGMANPICS[update_display])
+    print(''.join(blank_list))
+if update_display == 6:
+    print("GAME OVER.")
